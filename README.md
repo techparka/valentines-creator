@@ -1,62 +1,60 @@
-# 💌 Valentines Creator
+# 💌 Valentine's Card Creator
 
-Aplikacja webowa do stworzenia spersonalizowanej walentynki z możliwością wysłania via link lub QR code.
-
-**Live:** https://walentynki.techparka.pl/
+A web application to create personalized Valentine's Day cards with the ability to share via link or QR code.
 
 ---
 
 ## ✨ Features
 
-- 🎨 **3 motywy graficzne** - Ciemny romantyczny, Różowy glass, Gwiaździsta noc
-- 📝 **5 szablonów tekstów** - Różne style i emocje
-- ✍️ **Custom text** - Napisz swoją wiadomość (imię dodawane automatycznie)
-- 📱 **QR Code** - Wygeneruj i pobierz kod do wysłania
-- 🔗 **Link sharing** - Prześlij bezpośredni link do walentynki
-- 📱 **Responsive design** - Działa na desktop, tablet i mobile
-- 🐳 **Docker ready** - Łatwy deploy
-- 🌐 **Cloudflare Tunnel** - Bezpieczny dostęp z internetu
+- 🎨 **3 Beautiful Themes** - Dark Romantic, Pink Glass, Starry Night
+- 📝 **5 Text Templates** - Various styles and emotions
+- ✍️ **Custom Text** - Write your own message (recipient's name added automatically)
+- 📱 **QR Code Generator** - Generate and download QR code for sharing
+- 🔗 **Link Sharing** - Share direct link to the card
+- 📱 **Responsive Design** - Works on desktop, tablet, and mobile
+- 🐳 **Docker Ready** - Easy deployment
+- 🗄️ **SQLite Database** - Lightweight and portable
 
 ---
 
 ## 🚀 Quick Start
 
-### Wymagania
+### Requirements
 - Docker & Docker Compose
-- Python 3.12+ (jeśli chcesz uruchomić bez Docker'a)
+- Python 3.12+ (if running without Docker)
 
-### Docker (rekomendowane)
+### Docker (Recommended)
 
 ```bash
 git clone https://github.com/techparka/valentines-creator.git
 cd valentines-creator
 
-# Skopiuj .env
+# Copy environment template
 cp .env.example .env
 
-# Edytuj domenę (opcjonalnie)
+# Edit configuration (optional)
 nano .env
-# DOMAIN=https://twoja-domena.com
+# Set your DOMAIN if deploying to production
 
-# Uruchom
+# Run
 docker-compose up -d
 
-# Sprawdź logi
+# View logs
 docker-compose logs -f
 ```
 
-Dostęp: `http://localhost:8014`
+Access: `http://localhost:8014`
 
-### Lokalnie (bez Docker'a)
+### Local Setup (Without Docker)
 
 ```bash
 git clone https://github.com/techparka/valentines-creator.git
 cd valentines-creator
 
-# Zainstaluj dependencje
+# Install dependencies
 pip install -r requirements.txt
 
-# Uruchom Flask
+# Run Flask
 export DB_PATH=./valentines.db
 export DOMAIN=http://localhost:8014
 python app.py
@@ -64,26 +62,27 @@ python app.py
 
 ---
 
-## 📋 Struktura
+## 📋 Project Structure
 
 ```
 valentines-creator/
 ├── app.py                    # Flask backend
-├── requirements.txt          # Dependencje
-├── Dockerfile               # Docker config
-├── docker-compose.yml       # Compose config
-├── .env.example             # Template zmiennych
+├── requirements.txt          # Python dependencies
+├── Dockerfile               # Docker configuration
+├── docker-compose.yml       # Docker Compose setup
+├── .env.example             # Environment variables template
+├── README.md                # This file
 │
 ├── templates/
-│   ├── landing.html         # Strona główna
-│   ├── builder.html         # Kreator walentynki
-│   ├── preview.html         # Podgląd + share
-│   ├── valentine1.html      # Motyw 1: Ciemny
-│   ├── valentine2.html      # Motyw 2: Różowy glass
-│   └── valentine3.html      # Motyw 3: Gwiaździsta noc
+│   ├── landing.html         # Landing page
+│   ├── builder.html         # Card builder form
+│   ├── preview.html         # Preview & share page
+│   ├── valentine1.html      # Theme 1: Dark Romantic
+│   ├── valentine2.html      # Theme 2: Pink Glass
+│   └── valentine3.html      # Theme 3: Starry Night
 │
 └── static/
-    └── style.css            # Styles
+    └── style.css            # Styling
 ```
 
 ---
@@ -94,88 +93,68 @@ valentines-creator/
 - **Database:** SQLite
 - **Frontend:** HTML/CSS/JavaScript
 - **Server:** Gunicorn
-- **Deployment:** Docker + Cloudflare Tunnel
+- **Containerization:** Docker
 
 ---
 
-## 🔧 Konfiguracja
+## 🔧 Configuration
 
-### Zmienne środowiskowe (.env)
+### Environment Variables (.env)
 
 ```env
-# Domena do generowania linków
-DOMAIN=https://walentynki.example.com
+# Domain for generating card links
+DOMAIN=http://localhost:8014
 
-# Ścieżka do bazy danych
+# Path to SQLite database
 DB_PATH=/data/valentines.db
 ```
 
-### Cloudflare Tunnel
+---
 
-1. Zainstaluj cloudflared
-2. Login: `cloudflared tunnel login`
-3. Create tunnel: `cloudflared tunnel create valentines`
-4. Config w `~/.cloudflared/config.yml`:
+## 📖 How to Use
 
-```yaml
-tunnel: valentines
-credentials-file: /root/.cloudflared/TUNNEL_ID.json
-
-ingress:
-  - hostname: walentynki.example.com
-    service: http://localhost:8014
-  - service: http_status:404
-```
-
-5. Run: `cloudflared tunnel run valentines`
-6. Dodaj CNAME w Cloudflare DNS
+1. Visit the landing page
+2. Click "Create Valentine"
+3. Enter recipient's name
+4. Choose a theme (3 options)
+5. Select a text template (5 options) or write your own
+6. Copy link or download QR code
+7. Share with your special someone! 💘
 
 ---
 
-## 📖 Jak używać
+## 🗄️ Database
 
-1. Wejdź na stronę główną
-2. Kliknij "Stwórz Walentynkę"
-3. Wpisz imię wybranki
-4. Wybierz motyw (3 opcje)
-5. Wybierz szablon tekstu (5 opcji) lub napisz swój
-6. Skopiuj link lub pobierz QR code
-7. Wyślij dziewczynie! 💘
-
----
-
-## 📱 Baza danych
-
-SQLite z tabelą `valentines`:
+SQLite database with `valentines` table:
 
 ```sql
 CREATE TABLE valentines (
-    id TEXT PRIMARY KEY,           -- 8-znakowy ID
-    name TEXT NOT NULL,            -- Imię wybranki
-    theme INTEGER NOT NULL,        -- 1, 2 lub 3
-    template INTEGER NOT NULL,     -- 1-5
-    custom_title TEXT,             -- Custom nagłówek
-    custom_body TEXT,              -- Custom treść
-    custom_celeb TEXT,             -- Custom celebracja
-    created_at TIMESTAMP           -- Data utworzenia
+    id TEXT PRIMARY KEY,           -- 8-character unique ID
+    name TEXT NOT NULL,            -- Recipient's name
+    theme INTEGER NOT NULL,        -- Theme: 1, 2, or 3
+    template INTEGER NOT NULL,     -- Template: 1-5
+    custom_title TEXT,             -- Custom card title
+    custom_body TEXT,              -- Custom card message
+    custom_celeb TEXT,             -- Custom celebration message
+    created_at TIMESTAMP           -- Creation timestamp
 );
 ```
 
 ---
 
-## 🎨 Szablony tekstów
+## 🎨 Text Templates
 
-1. **Głęboka, wzruszająca** - Romantyczna i poważna
-2. **Krótka i mocna** - Prosta i bezpośrednia
-3. **Nostalgiczna, poetycka** - Wspomnienia i uczucia
-4. **Wdzięczna, ciepła** - Dziękowanie i miłość
-5. **Pewna siebie, zmysłowa** - Stanowcza i pełna pasji
+1. **Deep & Touching** - Romantic and heartfelt
+2. **Short & Powerful** - Simple and direct
+3. **Nostalgic & Poetic** - Memories and feelings
+4. **Grateful & Warm** - Thanks and affection
+5. **Confident & Sensual** - Passionate and bold
 
 ---
 
-## 🚢 Deploy
+## 🚀 Deployment
 
-### Docker Compose
+### Using Docker Compose
 
 ```bash
 docker-compose up --build -d
@@ -183,32 +162,66 @@ docker-compose logs -f
 docker-compose down
 ```
 
-### Proxmox LXC
+### Manual Deployment Example (Linux/Proxmox)
 
-1. Stwórz LXC kontener (Debian 12)
-2. Zainstaluj Docker: `curl -fsSL https://get.docker.com | sh`
-3. Clone repo i `docker-compose up -d`
+```bash
+# 1. Install dependencies
+apt update && apt install -y docker.io docker-compose git
+
+# 2. Clone repository
+cd /root
+git clone https://github.com/yourusername/valentines-creator.git
+cd valentines-creator
+
+# 3. Configure environment
+cp .env.example .env
+nano .env
+
+# 4. Start application
+docker-compose up -d
+
+# 5. Expose to internet (example: using reverse proxy)
+# Set up nginx, Apache, or Caddy to forward traffic to localhost:8014
+```
+
+### Making It Public
+
+To expose your application to the internet, you can use:
+- **Reverse Proxy** (nginx, Apache, Caddy)
+- **Tunnel Services** (ngrok, Cloudflare Tunnel, etc.)
+- **Cloud Hosting** (AWS, Digital Ocean, Heroku, etc.)
+
+Choose the method that best fits your infrastructure.
 
 ---
 
-## 📝 Licencja
+## 🔐 Security Notes
 
-MIT - Użyj i modyfikuj jak chcesz!
+- Change `DOMAIN` variable for production deployments
+- Keep `.env` file private (it's in `.gitignore`)
+- Use HTTPS when exposing to the internet
+- Regularly backup your SQLite database
+
+---
+
+## 📝 License
+
+MIT - Feel free to use and modify as needed!
+
+---
+
+## 🤝 Contributing
+
+Found a bug? Have a feature idea?
+- Open an issue on GitHub
+- Submit a pull request
 
 ---
 
 ## 👨‍💻 Author
 
-**techparka** - Valentine's Day 2026 🎁
+Created for Valentine's Day 2026 ❤️
 
 ---
 
-## 🤝 Wsparcie
-
-Znalazłeś bug? Masz pomysł na feature?
-- Open issue na GitHub
-- Lub skontaktuj się bezpośrednio
-
----
-
-**Made with ❤️ for Valentine's Day**
+**Enjoy creating beautiful Valentine's cards! 💌**
