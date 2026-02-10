@@ -17,6 +17,30 @@ A web application to create personalized Valentine's Day cards with the ability 
 
 ---
 
+## 🎬 How It Works
+
+### 1️⃣ Landing Page
+Users see the main page with a call-to-action to create their Valentine's card.
+
+### 2️⃣ Card Builder
+- Enter recipient's name
+- Choose from 3 beautiful themes
+- Select from 5 text templates or write custom message
+- Name is automatically added to the title
+
+### 3️⃣ Preview & Share
+- View the card with a preview iframe
+- Copy direct link or download QR code
+- Share via messaging apps or social media
+
+### 4️⃣ Recipient View
+- Recipient opens the link or scans QR code
+- Beautiful animated card displays
+- Interactive "Yes/No" buttons with confetti celebration
+- Fully responsive on all devices
+
+---
+
 ## 🚀 Quick Start
 
 ### Requirements
@@ -120,6 +144,27 @@ DB_PATH=/data/valentines.db
 5. Select a text template (5 options) or write your own
 6. Copy link or download QR code
 7. Share with your special someone! 💘
+
+---
+
+## 🎨 Card Themes
+
+### Theme 1: Dark Romantic
+- Deep dark background with glowing effects
+- Red accents and floating hearts animation
+- Intimate and passionate vibe
+
+### Theme 2: Pink Glass
+- Gradient pink background
+- Glass morphism effect
+- Animated heart drawing
+- Modern and elegant
+
+### Theme 3: Starry Night
+- Deep space background with twinkling stars
+- Purple gradients and nebula effects
+- Shooting stars celebration
+- Dreamy and mystical
 
 ---
 
