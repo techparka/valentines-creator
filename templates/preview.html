@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twoja Walentynka jest gotowa!</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-preview">
+    <div class="container">
+        <h1 class="page-title">Gotowe! &#10084;&#65039;</h1>
+        <p class="page-subtitle">Twoja Walentynka czeka na wybrankę. Skopiuj link i wyślij go.</p>
+
+        <div class="preview-frame-wrapper">
+            <iframe src="/v/{{ vid }}" class="preview-iframe" title="Podgląd walentynki"></iframe>
+        </div>
+
+        <div class="share-section">
+            <div class="share-tabs">
+                <button class="tab-btn active" onclick="switchTab('link')">Link tekstowy</button>
+                <button class="tab-btn" onclick="switchTab('qr')">Kod QR</button>
+            </div>
+
+            <div id="linkTab" class="tab-content active">
+                <label class="share-label">Link do Twojej Walentynki:</label>
+                <div class="share-row">
+                    <input type="text" id="shareLink" class="share-input" value="{{ base_domain }}/v/{{ vid }}" readonly onclick="this.select()">
+                    <button type="button" class="copy-btn" onclick="copyLink('shareLink')">Kopiuj</button>
+                </div>
+                <div class="copy-feedback" id="copyFeedback1">Skopiowano!</div>
+            </div>
+
+            <div id="qrTab" class="tab-content">
+                <label class="share-label">Zeskanuj lub pobierz:</label>
+                <div id="qrCode" style="text-align: center; padding: 20px; background: white; border-radius: 12px; margin: 15px 0;"></div>
+                <button type="button" class="copy-btn" style="width: 100%;" onclick="downloadQR()">Pobierz QR code</button>
+                <p class="tab-hint">Wyślij jej tę grafikę - zeskanuje i gotowe!</p>
+            </div>
+        </div>
+
+        <div class="preview-actions">
+            <a href="/v/{{ vid }}" class="action-link" target="_blank">Otwórz w nowym oknie &rarr;</a>
+            <a href="/create" class="action-link action-link--secondary">Stwórz kolejną</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const vid = '{{ vid }}';
+        const shareLink = document.getElementById('shareLink').value;
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const btns = document.querySelectorAll('.tab-btn');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            btns.forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tab + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+
+            // Generate QR on first view
+            if (tab === 'qr' && !window.qrGenerated) {
+                generateQR();
+                window.qrGenerated = true;
+            }
+        }
+
+        function generateQR() {
+            const qrContainer = document.getElementById('qrCode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: shareLink,
+                width: 250,
+                height: 250,
+                colorDark: '#c2185b',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrCode canvas');
+            if (!canvas) {
+                generateQR();
+                setTimeout(downloadQR, 300);
+                return;
+            }
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'walentynka-' + vid + '.png';
+            link.click();
+        }
+
+        function copyLink(inputId) {
+            const input = document.getElementById(inputId);
+            navigator.clipboard.writeText(input.value).then(() => {
+                const feedback = document.getElementById('copyFeedback1');
+                feedback.classList.add('visible');
+                setTimeout(() => feedback.classList.remove('visible'), 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walentynkowy Kreator</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-landing">
+    <div class="landing-wrapper">
+        <div class="landing-hearts" id="landingHearts"></div>
+
+        <div class="landing-content">
+            <div class="landing-heart-icon">&#10084;&#65039;</div>
+            <h1 class="landing-title">Walentynkowy Kreator</h1>
+            <p class="landing-tagline">Stwórz spersonalizowaną walentynkę i wyślij link swojej wybrance</p>
+
+            <a href="/create" class="landing-cta">Stwórz Walentynkę &#10084;&#65039;</a>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">Wpisz imię</div>
+                </div>
+                <div class="step-arrow">&rarr;</div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">Wybierz styl</div>
+                </div>
+                <div class="step-arrow">&rarr;</div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">Wyślij link</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const container = document.getElementById('landingHearts');
+            const hearts = ['\u2764', '\u2661', '\u2665', '\u2763'];
+            for (let i = 0; i < 15; i++) {
+                const h = document.createElement('div');
+                h.className = 'landing-float-heart';
+                h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                h.style.left = Math.random() * 100 + '%';
+                h.style.fontSize = (12 + Math.random() * 18) + 'px';
+                h.style.animationDuration = (8 + Math.random() * 12) + 's';
+                h.style.animationDelay = Math.random() * 8 + 's';
+                h.style.opacity = 0;
+                container.appendChild(h);
+            }
+        })();
+    </script>
+</body>
+</html>

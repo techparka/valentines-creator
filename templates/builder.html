@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stwórz Walentynkę</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-builder">
+    <div class="container">
+        <a href="/" class="back-link">&larr; Strona główna</a>
+        <h1 class="page-title">Stwórz Walentynkę</h1>
+        <p class="page-subtitle">Wybierz imię, motyw i tekst &mdash; wyślij link swojej wybrance</p>
+
+        <form method="POST" action="/create" id="builderForm">
+            <!-- Section 1: Name -->
+            <section class="form-section">
+                <h2 class="section-title">Imię wybranki</h2>
+                <p class="section-hint">Wpisz w formie, jakiej chcesz &mdash; np. Ania, Aniu, Kochanie</p>
+                <input type="text" name="name" id="nameInput" class="name-input" placeholder="np. Aniu" required maxlength="50" autocomplete="off">
+            </section>
+
+            <!-- Section 2: Theme -->
+            <section class="form-section">
+                <h2 class="section-title">Motyw</h2>
+                <div class="cards-grid">
+                    {% for tid, theme in themes.items() %}
+                    <label class="theme-card" data-theme="{{ tid }}">
+                        <input type="radio" name="theme" value="{{ tid }}" {% if tid == 1 %}checked{% endif %} required>
+                        <div class="card-inner">
+                            <div class="theme-colors">
+                                {% for color in theme.colors %}
+                                <span class="color-dot" style="background: {{ color }}"></span>
+                                {% endfor %}
+                            </div>
+                            <div class="card-label">{{ theme.name }}</div>
+                            <div class="card-desc">{{ theme.desc }}</div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Section 3: Template -->
+            <section class="form-section">
+                <h2 class="section-title">Szablon tekstu</h2>
+                <div class="cards-grid cards-grid--templates">
+                    {% for tid, tmpl in templates.items() %}
+                    <label class="template-card" data-template="{{ tid }}">
+                        <input type="radio" name="template" value="{{ tid }}" {% if tid == 1 %}checked{% endif %} required>
+                        <div class="card-inner">
+                            <div class="card-label">{{ tmpl.label }}</div>
+                            <div class="card-preview">&bdquo;{{ tmpl.preview }}&rdquo;</div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Section 4: Custom text (optional) -->
+            <section class="form-section">
+                <h2 class="section-title">Dostosuj tekst (opcjonalnie)</h2>
+                <p class="section-hint">Zostaw puste, aby użyć szablonu. Lub napisz swój tekst.</p>
+
+                <label class="form-label">Nagłówek (maks. 80 znaków)</label>
+                <p class="form-helper">Wpisz tutaj, a imię z sekcji "Imię wybranki" zostanie automatycznie dodane na koniec</p>
+                <input type="text" name="custom_title" id="customTitle" class="text-input" placeholder="np. Moja kochana..." maxlength="80" autocomplete="off">
+                <div class="char-preview" id="titlePreview">Podgląd: Moja kochana <span class="name-preview">(imię)</span></div>
+                <div class="char-count" id="titleCount">0/80</div>
+
+                <label class="form-label">Treść listu (maks. 800 znaków)</label>
+                <textarea name="custom_body" id="customBody" class="text-input textarea" placeholder="Napisz swoją wiadomość..." maxlength="800" autocomplete="off" rows="6"></textarea>
+                <div class="char-count" id="bodyCount">0/800</div>
+
+                <label class="form-label">Słowa do celebracji (maks. 200 znaków)</label>
+                <input type="text" name="custom_celeb" id="customCeleb" class="text-input" placeholder="np. Wiedziałem, że powiesz Tak!" maxlength="200" autocomplete="off">
+                <div class="char-count" id="celebCount">0/200</div>
+            </section>
+
+            <button type="submit" class="submit-btn">Stwórz Walentynkę &#10084;&#65039;</button>
+        </form>
+    </div>
+
+    <script>
+        // Get inputs
+        const nameInput = document.getElementById('nameInput');
+        const titleInput = document.getElementById('customTitle');
+        const bodyInput = document.getElementById('customBody');
+        const celebInput = document.getElementById('customCeleb');
+        const titlePreview = document.getElementById('titlePreview');
+
+        function updateCounter(input, countEl, max) {
+            countEl.textContent = input.value.length + '/' + max;
+        }
+
+        function updateTitlePreview() {
+            const customTitle = titleInput.value || 'Moja kochana';
+            const name = nameInput.value || '(imię)';
+            titlePreview.innerHTML = `Podgląd: ${customTitle} <span class="name-preview">${name}</span>`;
+        }
+
+        if (titleInput) {
+            titleInput.addEventListener('input', () => {
+                updateCounter(titleInput, document.getElementById('titleCount'), 80);
+                updateTitlePreview();
+            });
+        }
+        if (nameInput) {
+            nameInput.addEventListener('input', updateTitlePreview);
+        }
+        if (bodyInput) {
+            bodyInput.addEventListener('input', () => updateCounter(bodyInput, document.getElementById('bodyCount'), 800));
+        }
+        if (celebInput) {
+            celebInput.addEventListener('input', () => updateCounter(celebInput, document.getElementById('celebCount'), 200));
+        }
+
+        // Initial preview
+        updateTitlePreview();
+    </script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dla Ciebie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(150deg, #0a0a2e 0%, #16133a 30%, #1a1040 50%, #0d0b2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            color: #e8dff0;
+        }
+
+        /* ── Stars background ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle ease-in-out infinite;
+        }
+
+        .star.big {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px 1px rgba(255,255,255,0.3);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50%      { opacity: 1; }
+        }
+
+        /* ── Soft nebula glow ── */
+        .nebula {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .nebula-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(120,60,180,0.08) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+        }
+
+        .nebula-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(180,80,120,0.06) 0%, transparent 70%);
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* ── Screens ── */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 20px;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        /* ── Screen 0: Picker ── */
+        .picker-card {
+            background: rgba(20,15,50,0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(180,140,255,0.15);
+            border-radius: 20px;
+            padding: 35px 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .picker-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #d4a0ff;
+            margin-bottom: 25px;
+        }
+
+        .picker-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 12px;
+            background: rgba(180,140,255,0.08);
+            border: 1px solid rgba(180,140,255,0.2);
+            border-radius: 14px;
+            color: #e8dff0;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .picker-btn:hover {
+            background: rgba(180,140,255,0.2);
+            border-color: rgba(180,140,255,0.5);
+            transform: translateX(5px);
+        }
+
+        .picker-btn strong {
+            color: #d4a0ff;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .picker-hint {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: rgba(232,223,240,0.3);
+            font-style: italic;
+        }
+
+        /* ── Screen 1: Moon ── */
+        #screen-moon {
+            cursor: pointer;
+        }
+
+        .moon-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            animation: moonFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+        }
+
+        .moon {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff8e7, #f0d890, #d4a040);
+            box-shadow:
+                0 0 40px rgba(240,216,144,0.3),
+                0 0 80px rgba(240,216,144,0.15),
+                inset -20px -10px 30px rgba(180,140,60,0.3);
+            position: relative;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: rgba(180,140,60,0.15);
+            border-radius: 50%;
+            top: 30px;
+            left: 50px;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: rgba(180,140,60,0.1);
+            border-radius: 50%;
+            top: 80px;
+            left: 100px;
+        }
+
+        .moon-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            filter: drop-shadow(0 0 15px rgba(255,180,200,0.6));
+            animation: moonHeartBeat 2s ease-in-out infinite;
+        }
+
+        @keyframes moonHeartBeat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            15%      { transform: translate(-50%, -50%) scale(1.15); }
+            30%      { transform: translate(-50%, -50%) scale(1); }
+            45%      { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .moon-text {
+            margin-top: 35px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: rgba(212,160,255,0.6);
+            animation: fadeInOut 3s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.4; }
+            50%      { opacity: 1; }
+        }
+
+        /* ── Screen 2: Letter ── */
+        .night-card {
+            background: rgba(20,15,50,0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(180,140,255,0.15);
+            border-radius: 20px;
+            padding: 40px 35px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: visible;
+        }
+
+        .card-star {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            animation: starPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50%      { transform: scale(1.15); opacity: 1; }
+        }
+
+        .card-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #d4a0ff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(212,160,255,0.3);
+        }
+
+        .card-body {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.9;
+            color: rgba(232,223,240,0.85);
+            margin-bottom: 25px;
+        }
+
+        .card-body p {
+            margin-bottom: 12px;
+        }
+
+        .card-question {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4a0ff;
+            margin: 25px 0 30px;
+            line-height: 1.3;
+            text-shadow: 0 0 25px rgba(212,160,255,0.3);
+        }
+
+        /* ── Buttons ── */
+        .buttons-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 120px;
+            width: 100%;
+        }
+
+        .btn {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 14px 45px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #9b59b6, #d4a0ff);
+            color: white;
+            box-shadow: 0 6px 25px rgba(155,89,182,0.35);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 35px rgba(155,89,182,0.5);
+        }
+
+        .btn-no {
+            background: rgba(180,140,255,0.1);
+            color: rgba(232,223,240,0.5);
+            border: 1px solid rgba(180,140,255,0.2);
+            font-size: 1.2rem;
+            padding: 10px 30px;
+            transition: transform 0.25s ease, opacity 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ── Screen 3: Celebration ── */
+        .celeb-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .celeb-moon {
+            font-size: 4rem;
+            display: inline-block;
+            animation: starPulse 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 25px rgba(212,160,255,0.5));
+        }
+
+        .celeb-title {
+            font-family: 'Caveat', cursive;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #d4a0ff;
+            margin: 15px 0;
+            text-shadow: 0 0 30px rgba(212,160,255,0.4);
+        }
+
+        .celeb-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: rgba(232,223,240,0.8);
+            line-height: 1.8;
+            max-width: 450px;
+        }
+
+        .celeb-text p {
+            margin-bottom: 10px;
+        }
+
+        .celeb-date {
+            margin-top: 30px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: rgba(212,160,255,0.4);
+        }
+
+        /* ── Shooting star ── */
+        .shooting-star {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 2px rgba(255,255,255,0.6);
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(to left, rgba(255,255,255,0.8), transparent);
+            transform-origin: right center;
+        }
+
+        /* ── Falling sparkles ── */
+        .sparkle {
+            position: fixed;
+            z-index: 99;
+            pointer-events: none;
+            animation: sparkleDown ease-out forwards;
+        }
+
+        @keyframes sparkleDown {
+            0%   { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .night-card, .picker-card {
+                padding: 25px 18px;
+                margin: 10px;
+            }
+            .card-title { font-size: 1.9rem; }
+            .card-body { font-size: 1rem; }
+            .card-question { font-size: 2rem; }
+            .btn-yes { font-size: 1.4rem; padding: 12px 35px; }
+            .btn-no { font-size: 1rem; padding: 8px 25px; }
+            .celeb-title { font-size: 2.5rem; }
+            .celeb-text { font-size: 1.05rem; }
+            .moon-wrapper { transform: scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+
+<!-- Screen 0: Picker -->
+<div class="screen hidden" id="screen-picker">
+    <div class="picker-card">
+        <div class="picker-title">Wybierz szablon</div>
+        <button class="picker-btn" onclick="pickTemplate(1)">
+            <strong>1. Głęboka, wzruszająca</strong><br>
+            „Każdego ranka budzę się z myślą, że jestem najszczęśliwszym człowiekiem na świecie..."
+        </button>
+        <button class="picker-btn" onclick="pickTemplate(2)">
+            <strong>2. Krótka i mocna</strong><br>
+            „Mógłbym napisać tysiąc słów... ale Ty znasz mnie lepiej niż ktokolwiek..."
+        </button>
+        <button class="picker-btn" onclick="pickTemplate(3)">
+            <strong>3. Nostalgiczna, poetycka</strong><br>
+            „Pamiętasz naszą pierwszą Walentynkę? Od tamtego dnia..."
+        </button>
+        <button class="picker-btn" onclick="pickTemplate(4)">
+            <strong>4. Wdzięczna, ciepła</strong><br>
+            „Gdybym mógł cofnąć czas, wybrałbym Cię jeszcze raz..."
+        </button>
+        <button class="picker-btn" onclick="pickTemplate(5)">
+            <strong>5. Pewna siebie, zmysłowa</strong><br>
+            „Nie wiem, czym sobie zasłużyłem na kogoś takiego jak Ty..."
+        </button>
+        <div class="picker-hint">Podgląd dla Ciebie — żona zobaczy tylko wybrany szablon</div>
+    </div>
+</div>
+
+<!-- Screen 1: Moon -->
+<div class="screen hidden" id="screen-moon" onclick="openLetter()">
+    <div class="moon-wrapper">
+        <div class="moon">
+            <div class="moon-heart">💜</div>
+        </div>
+    </div>
+    <div class="moon-text">Dotknij księżyc...</div>
+</div>
+
+<!-- Screen 2: Letter -->
+<div class="screen hidden" id="screen-letter">
+    <div class="night-card">
+        <div class="card-star">✨ 💜 ✨</div>
+        <div class="card-title" id="letterTitle"></div>
+        <div class="card-body" id="letterBody"></div>
+        <div class="card-question">Czy zostaniesz moją Walentynką?</div>
+        <div class="buttons-row" id="buttonsRow">
+            <button class="btn btn-yes" onclick="sayYes()">Tak! 💜</button>
+            <button class="btn btn-no" id="btnNo" onmouseenter="escapeBtn()" ontouchstart="escapeBtn()">Nie</button>
+        </div>
+    </div>
+</div>
+
+<!-- Screen 3: Celebration -->
+<div class="screen hidden" id="screen-celebration">
+    <div class="celeb-card">
+        <div class="celeb-moon">🌙 💜</div>
+        <div class="celeb-title" id="celebrationTitle"></div>
+        <div class="celeb-text" id="celebrationText"></div>
+        <div class="celeb-date">~ 14 lutego 2026 ~</div>
+    </div>
+</div>
+
+<script>
+    // ── Templates ──
+    const templates = {
+        1: {
+            title: 'Moja jedyna...',
+            body: `
+                <p>Nie potrzebuję jednego dnia w roku, żeby Ci powiedzieć,
+                   co do Ciebie czuję. Ale dzisiaj chcę to zrobić wyjątkowo.</p>
+                <p>Każdego ranka budzę się z myślą, że jestem najszczęśliwszym
+                   człowiekiem na świecie — bo mam Ciebie.
+                   Twój śmiech leczy moje gorsze dni,
+                   a Twoje serce jest moim domem.</p>
+                <p>Po tych wszystkich wspólnych latach kocham Cię bardziej
+                   niż pierwszego dnia. I mam do Ciebie jedno pytanie...</p>
+            `,
+            celebTitle: 'Wiedziałem!',
+            celebText: `
+                <p>Bo tak naprawdę nigdy nie było innej opcji.</p>
+                <p>Dziękuję, że jesteś ze mną —
+                   wczoraj, dziś i na zawsze.</p>
+                <p>Kocham Cię najbardziej na świecie 💜</p>
+            `
+        },
+        2: {
+            title: 'Hej, Piękna...',
+            body: `
+                <p>Wiesz co? Mógłbym napisać tysiąc słów o tym,
+                   jak bardzo Cię kocham.</p>
+                <p>Ale Ty znasz mnie lepiej niż ktokolwiek —
+                   wiesz, że wolę to pokazywać niż mówić.</p>
+                <p>Dziś jednak zrobię wyjątek.
+                   Jesteś miłością mojego życia. Kropka.</p>
+                <p>A teraz... mam jedno małe pytanie...</p>
+            `,
+            celebTitle: 'A widzisz!',
+            celebText: `
+                <p>Nie da się powiedzieć „Nie" miłości życia.</p>
+                <p>Dziękuję, że jesteś moja —
+                   dzisiaj, jutro i na zawsze.</p>
+                <p>Kocham Cię. I to nie podlega dyskusji 💜</p>
+            `
+        },
+        3: {
+            title: 'Kochanie...',
+            body: `
+                <p>Pamiętasz naszą pierwszą Walentynkę?
+                   Od tamtego dnia minęło tyle czasu,
+                   a ja nadal czuję to samo ciepło,
+                   kiedy splatasz swoje palce z moimi.</p>
+                <p>Zmieniło się wszystko wokół nas —
+                   ale jedno zostało takie samo:
+                   to, jak mocno bije mi serce, gdy jesteś blisko.</p>
+                <p>I jest coś, o co chcę Cię dziś zapytać,
+                   choć odpowiedź znam od lat...</p>
+            `,
+            celebTitle: 'Jak zawsze...',
+            celebText: `
+                <p>...tak samo jak za pierwszym razem.</p>
+                <p>Każda kolejna Walentynka z Tobą jest
+                   najpiękniejszą z nich wszystkich.</p>
+                <p>Kocham Cię — niezmiennie i bez końca 💜</p>
+            `
+        },
+        4: {
+            title: 'Moje serce...',
+            body: `
+                <p>Gdybym mógł cofnąć czas —
+                   wybrałbym Cię jeszcze raz.
+                   I jeszcze raz. I za każdym razem.</p>
+                <p>Dziękuję za każdy wspólny poranek,
+                   za każdy wieczór na kanapie,
+                   za każdą chwilę, w której po prostu byłaś obok.</p>
+                <p>Ty sprawiasz, że zwykłe dni stają się niezwykłe.
+                   I mam do Ciebie pewne pytanie...</p>
+            `,
+            celebTitle: 'Dziękuję!',
+            celebText: `
+                <p>Za to, że wybrałaś mnie.
+                   Za to, że wybierasz mnie każdego dnia.</p>
+                <p>Obiecuję Ci kolejne wspólne lata
+                   pełne miłości, śmiechu i przygód.</p>
+                <p>Na zawsze Twój 💜</p>
+            `
+        },
+        5: {
+            title: 'Ty...',
+            body: `
+                <p>Nie wiem, czym sobie zasłużyłem
+                   na kogoś takiego jak Ty.</p>
+                <p>Potrafisz jednym spojrzeniem sprawić,
+                   że zapominam o całym świecie.
+                   Jednym uśmiechem — że wszystko będzie dobrze.
+                   I jednym dotykiem — że jestem w domu.</p>
+                <p>Jesteś wszystkim, o czym nie wiedziałem,
+                   że marzę. A teraz mam jedno pytanie...</p>
+            `,
+            celebTitle: 'Moja Walentynko!',
+            celebText: `
+                <p>Wiedziałem, że powiesz „Tak" —
+                   bo jesteśmy pisani sobie.</p>
+                <p>Obiecuję, że każdy dzień z Tobą
+                   będę traktował jak prezent.</p>
+                <p>Kocham Cię ponad wszystko 💜</p>
+            `
+        }
+    };
+
+    // ── Template selection ──
+    const params = new URLSearchParams(window.location.search);
+    let chosenTemplate = parseInt(params.get('v'));
+
+    if (chosenTemplate >= 1 && chosenTemplate <= 5) {
+        applyTemplate(chosenTemplate);
+        showScreen('screen-moon');
+    } else {
+        showScreen('screen-picker');
+    }
+
+    function pickTemplate(num) {
+        applyTemplate(num);
+        showScreen('screen-moon');
+    }
+
+    function applyTemplate(num) {
+        const t = templates[num];
+        document.getElementById('letterTitle').innerHTML = t.title;
+        document.getElementById('letterBody').innerHTML = t.body;
+        document.getElementById('celebrationTitle').innerHTML = t.celebTitle;
+        document.getElementById('celebrationText').innerHTML = t.celebText;
+    }
+
+    // ── Stars ──
+    function createStars() {
+        const container = document.getElementById('stars');
+        for (let i = 0; i < 120; i++) {
+            const star = document.createElement('div');
+            star.className = 'star' + (Math.random() > 0.85 ? ' big' : '');
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDuration = (2 + Math.random() * 4) + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(star);
+        }
+    }
+    createStars();
+
+    // ── Screen transitions ──
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        setTimeout(() => {
+            document.getElementById(id).classList.remove('hidden');
+        }, 200);
+    }
+
+    function openLetter() {
+        const moon = document.querySelector('.moon-wrapper');
+        moon.style.transition = 'transform 0.8s ease, opacity 0.8s ease';
+        moon.style.transform = 'scale(1.5) translateY(-30px)';
+        moon.style.opacity = '0';
+        setTimeout(() => showScreen('screen-letter'), 700);
+    }
+
+    // ── Escaping "No" button ──
+    let escapeCount = 0;
+    const phases = [
+        { range: 0.3, texts: ['Hmm... na pewno?', 'Pomyśl jeszcze raz!', 'Ej, no weź!'] },
+        { range: 0.5, texts: ['Serio "Nie"?!', 'Nie ma takiej opcji!', 'Nawet nie próbuj!'] },
+        { range: 0.8, texts: ['No dobra, poddaję się...', 'A nie, żartowałem!', '...'] },
+    ];
+
+    function getPhase() {
+        if (escapeCount < 3) return phases[0];
+        if (escapeCount < 6) return phases[1];
+        return phases[2];
+    }
+
+    function escapeBtn() {
+        const btn = document.getElementById('btnNo');
+        const phase = getPhase();
+        const phaseIndex = escapeCount < 3 ? escapeCount : (escapeCount < 6 ? escapeCount - 3 : escapeCount - 6);
+
+        const distance = 40 + phase.range * 120;
+        const angle = Math.random() * Math.PI * 2;
+        const moveX = Math.cos(angle) * distance;
+        const moveY = Math.sin(angle) * distance * 0.5;
+
+        btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+        if (phaseIndex < phase.texts.length) {
+            btn.textContent = phase.texts[phaseIndex];
+        }
+
+        escapeCount++;
+
+        const yesBtn = document.querySelector('.btn-yes');
+        const newScale = 1 + escapeCount * 0.04;
+        yesBtn.style.transform = `scale(${Math.min(newScale, 1.5)})`;
+
+        if (escapeCount >= 9) {
+            btn.style.transform = 'translate(0, 0) scale(0)';
+            btn.style.opacity = '0';
+            setTimeout(() => { btn.style.display = 'none'; }, 300);
+        }
+    }
+
+    // ── Celebration ──
+    function sayYes() {
+        showScreen('screen-celebration');
+        shootingStar(300);
+        shootingStar(1000);
+        shootingStar(1800);
+        spawnSparkles();
+    }
+
+    function shootingStar(delay) {
+        setTimeout(() => {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            const startX = Math.random() * 60 + 10;
+            star.style.left = startX + 'vw';
+            star.style.top = (Math.random() * 20) + 'vh';
+            document.body.appendChild(star);
+
+            const endX = startX + 30 + Math.random() * 20;
+            const endY = 60 + Math.random() * 30;
+
+            star.animate([
+                { transform: 'translate(0,0) rotate(-35deg)', opacity: 1 },
+                { transform: `translate(${endX - startX}vw, ${endY}vh) rotate(-35deg)`, opacity: 0 }
+            ], { duration: 1200, easing: 'ease-in', fill: 'forwards' });
+
+            setTimeout(() => star.remove(), 1300);
+        }, delay);
+    }
+
+    function spawnSparkles() {
+        const sparkles = ['✨', '⭐', '🌟', '💫'];
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const el = document.createElement('div');
+                el.className = 'sparkle';
+                el.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+                el.style.left = (5 + Math.random() * 90) + 'vw';
+                el.style.top = '-20px';
+                el.style.fontSize = (14 + Math.random() * 16) + 'px';
+                el.style.animationDuration = (3 + Math.random() * 3) + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 6500);
+            }, i * 250);
+        }
+    }
+</script>
+
+</body>
+</html>

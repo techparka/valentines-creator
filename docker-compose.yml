@@ -1,0 +1,12 @@
+services:
+  valentines:
+    build: .
+    container_name: valentines
+    restart: unless-stopped
+    ports:
+      - "8014:80"
+    volumes:
+      - valentine-data:/data
+
+volumes:
+  valentine-data:
